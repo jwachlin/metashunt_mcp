@@ -1,0 +1,9 @@
+{
+  "mcp": {
+    "metashunt": {
+      "type": "local",
+      "command": ["metashunt-mcp-readonly"],
+      "enabled": true
+    }
+  }
+}
