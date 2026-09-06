@@ -27,13 +27,10 @@ MetaShunt V2  ──▶  measures from ~10s of nA to ~2 A
   tick (4 ticks/µs → us = ticks / 4).  The 32-bit tick wraps every ~17.9
   minutes and the device may reset; both cases are unwrapped/re-anchored so
   burst data stays time-aligned with the continuous stream even though USB-FS
-  deliverst the device's 32,000-sample buffer to the host with wall-clock
+  delivers the device's 32,000-sample buffer to the host with wall-clock
   delay.
 - **Charge-preserving adaptive decimation** (see below) keeps the MCP
   responses small without ever "missing" a current spike.
-- **No shunt control.**  The MetaShunt automatically switches its R-shunt
-  resistors to keep burden voltage low while measuring accurately from tens of
-  nA to ~2 A.  The server never touches them, and does not expose them.
 
 ## Install
 
@@ -251,7 +248,7 @@ Sessions live in `~/.metashunt/logs/` (override with `METASHUNT_LOG_DIR`) as:
 
 | Variable | Default | Meaning |
 |---|---|---|
-| `METASHUNT_BAUD` | 1000000 | baud for the serial link (cosmetic over USB-FS, honored for other adapters) |
+| `METASHUNT_BAUD` | 1000000 | baud for the serial link (cosmetic over USB-FS) |
 | `METASHUNT_LOG_DIR` | `~/.metashunt/logs` | where sessions are persisted |
 | `METASHUNT_RING_SIZE` | 262144 | in-memory raw ring capacity (samples) |
 | `METASHUNT_IDLE_TIMEOUT` | 2.0 | reserved (idle detection) |
@@ -263,12 +260,6 @@ Sessions live in `~/.metashunt/logs/` (override with `METASHUNT_LOG_DIR`) as:
 
 ## Notes and limitations
 
-- The MCP surface intentionally has **no R-shunt / configuration tools**: the
-  device manages shunt switching autonomously to keep burden voltage low while
-  measuring from ~10s of nA to ~2 A.
-- The original blocking config read/write device functions still exist in
-  `metashunt_v2_lib.py` for manual hardware testing, but are not exposed as
-  MCP tools.
 - Transport is **stdio only**; the serial I/O stays on the host machine where
   the MetaShunt is plugged in (OpenCode launches the server locally).  No
   cloud / OpenRouter side ever touches the USB device.
